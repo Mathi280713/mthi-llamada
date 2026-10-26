@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a7c6c">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>html,body{margin:0;padding:0}</style></head><body>
+<title>Mthi Llamada</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root {
+  --bg: #eceff0;
+  --surface: #ffffff;
+  --ink: #11181c;
+  --muted: #5a686e;
+  --line: #d3dadc;
+  --accent: #0a7c6c;
+  --accent-ink: #ffffff;
+  --accent-soft: #d6efea;
+  --danger: #b3261e;
+  --paper-bg: #ffffff;
+  --paper-ink: #151a1d;
+  --shadow: 0 10px 30px rgba(10, 30, 28, 0.16);
+  --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --font-ui: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1113;
+    --surface: #151c1f;
+    --ink: #e7eeef;
+    --muted: #8c9ca2;
+    --line: #263135;
+    --accent: #4fd6bd;
+    --accent-ink: #03211c;
+    --accent-soft: #123b35;
+    --danger: #ff8a80;
+    --paper-bg: #151c1f;
+    --paper-ink: #e7eeef;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1113;
+  --surface: #151c1f;
+  --ink: #e7eeef;
+  --muted: #8c9ca2;
+  --line: #263135;
+  --accent: #4fd6bd;
+  --accent-ink: #03211c;
+  --accent-soft: #123b35;
+  --danger: #ff8a80;
+  --paper-bg: #151c1f;
+  --paper-ink: #e7eeef;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.45;
+  overflow: hidden;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+#app { position: relative; height: 100%; max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ibtn { flex: none; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; background: transparent; border: 0; border-radius: 12px; color: var(--ink); }
+.ibtn:hover { background: var(--accent-soft); }
+.ibtn svg, .tbtn svg, .opt svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.btn { min-height: 46px; padding: 0 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; font-weight: 600; font-size: 15px; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.danger { color: var(--danger); border-color: var(--danger); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.home { display: flex; flex-direction: column; height: 100%; }
+.home-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 14px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1; letter-spacing: -0.01em; }
+.brand span { color: var(--accent); }
+.homeq { margin: 12px 0 8px; min-height: 48px; width: 100%; padding: 0 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; font-size: 16px; }
+.note { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
+.list { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: 10px; padding: 4px 0 110px; }
+.empty { padding: 36px 8px; text-align: center; color: var(--muted); display: grid; gap: 8px; justify-items: center; }
+.empty h2 { margin: 0; font-family: var(--font-display); font-size: 26px; color: var(--ink); }
+.empty p { margin: 0; max-width: 34ch; }
+.fab { position: absolute; right: 0; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 8px; height: 58px; padding: 0 22px 0 18px; border: 0; border-radius: 18px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 16px; box-shadow: var(--shadow); }
+.fab svg { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+.ed { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.ed-top { order: -2; display: flex; align-items: center; gap: 4px; flex: none; min-height: 56px; }
+.ed-title { flex: 1; min-width: 0; display: grid; }
+.ed-title input { min-width: 0; width: 100%; padding: 2px 4px; background: transparent; border: 0; border-radius: 6px; font-family: var(--font-display); font-weight: 700; font-size: 20px; line-height: 1.2; }
+.ed-title input::placeholder { color: var(--muted); }
+.ed-title small { padding: 0 4px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ed-title small.err { color: var(--danger); }
+.backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.45); }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 51; max-width: 860px; max-height: 84%; margin: 0 auto; overflow-y: auto; padding: 8px max(16px, env(safe-area-inset-left, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-radius: 22px 22px 0 0; box-shadow: var(--shadow); animation: up 0.22s ease-out; }
+@keyframes up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sheet .grab { width: 44px; height: 5px; margin: 4px auto 10px; border-radius: 3px; background: var(--line); }
+.sheet h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+.sheet h3 { margin: 16px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.sheet p { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.opt { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 12px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; font-size: 15px; font-weight: 500; }
+.opt:hover { border-color: var(--accent); }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.opt svg { color: var(--accent); flex: none; }
+.opt.danger { color: var(--danger); }
+.opt.danger svg { color: var(--danger); }
+.field { display: grid; gap: 6px; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.field input, .field textarea { width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; font-size: 16px; font-weight: 400; color: var(--ink); }
+.field textarea { min-height: 120px; resize: vertical; }
+.rowbtn { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.stat { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.stat span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; }
+.result { white-space: pre-wrap; padding: 12px; margin: 8px 0; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; max-height: 34vh; overflow-y: auto; color: var(--ink); font-size: 15px; }
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 70; transform: translateX(-50%); max-width: calc(100% - 32px); padding: 11px 18px; background: var(--ink); color: var(--bg); border-radius: 14px; font-size: 14px; font-weight: 500; box-shadow: var(--shadow); animation: up 0.2s ease-out; }
+[hidden] { display: none !important; }
+input, textarea, select { box-sizing: border-box; max-width: 100%; }
+.field { min-width: 0; }
+.filewrap { position: relative; display: inline-flex; }
+.ovl { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 0; cursor: pointer; z-index: 2; }
+.opt.filewrap { position: relative; }
+*, *::before, *::after { box-sizing: border-box; }
+.top { flex: none; display: flex; align-items: center; gap: 6px; padding: 14px 0 6px; min-height: 66px; }
+.brand { font-size: 26px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.content { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 8px 0 30px; touch-action: manipulation; }
+.pill { min-height: 46px; padding: 0 18px; border-radius: 14px; font-weight: 700; font-size: 15px; background: var(--surface); border: 1px solid var(--line); }
+.pill.pr { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.row2 { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
+.seg { display: flex; gap: 6px; margin: 2px 0 12px; overflow-x: auto; justify-content: center; }
+.seg button { flex: none; min-height: 36px; padding: 0 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-weight: 600; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.note { font-size: 13px; color: var(--muted); text-align: center; margin: 8px 0; }
+.in { width: 100%; min-height: 48px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; font-size: 16px; color: var(--ink); font-family: inherit; } textarea.in { font-size: 13px; word-break: break-all; resize: vertical; }
+.h3 { margin: 16px 0 6px; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.big { display: block; width: 100%; min-height: 72px; margin: 0 0 12px; padding: 0 20px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); font-size: 20px; font-weight: 700; text-align: left; }
+.big.pr { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chipb { min-height: 40px; padding: 0 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-weight: 600; font-size: 14px; } .chipb[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.card { padding: 14px 16px; margin: 14px 0; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; font-size: 14px; } .card ol { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; }
+.tgl { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; } .tgl input { width: 20px; height: 20px; accent-color: var(--accent); }
+.timer { text-align: center; font-size: 52px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--accent); margin: 18px 0 4px; }
+.hang { background: var(--danger); color: #fff; border-color: var(--danger); } .err { font-size: 14px; min-height: 1.2em; }
+.chatbox { overflow-y: auto; padding: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; display: flex; flex-direction: column; gap: 6px; }
+.msg { max-width: 82%; padding: 8px 12px; border-radius: 14px; font-size: 15px; overflow-wrap: anywhere; white-space: pre-wrap; } .msg.me { align-self: flex-end; background: var(--accent); color: var(--accent-ink); } .msg.you { align-self: flex-start; background: var(--accent-soft); } .msg small { opacity: .75; }
+.chatf { display: flex; gap: 8px; margin-top: 8px; } .chatf .in { flex: 1; } .chatf .pill { min-height: 48px; }
+
+</style>
+<div id="app">
+  <header class="top"><button class="ibtn" id="backBtn" type="button" data-i="back" aria-label="Volver" hidden></button><h1 class="brand" id="ttl">Mthi <span>Llamada</span></h1></header>
+  <main class="content" id="content"></main>
+  <div id="layer"></div>
+</div>
+
+<script>
+/* ===== Utilidades ===== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const lsGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } };
+const debounce = (fn, ms) => { let t; const f = (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; f.flush = () => { clearTimeout(t); fn(); }; f.cancel = () => clearTimeout(t); return f; };
+const plural = (n, a, b) => n + ' ' + (n === 1 ? a : b);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+const mkCanvas = (w, h) => { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; };
+const toBlob = (c, type, q) => new Promise((res, rej) => c.toBlob((b) => (b ? res(b) : rej(new Error('No se pudo crear la imagen.'))), type, q));
+const nextFrame = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+function fmtSize(n) { return n < 1024 ? n + ' B' : n < 1048576 ? Math.round(n / 1024) + ' KB' : (n / 1048576).toFixed(1) + ' MB'; }
+function timeAgo(ms) {
+  const d = Date.now() - ms;
+  if (d < 45000) return 'ahora';
+  if (d < 3600000) return 'hace ' + Math.max(1, Math.round(d / 60000)) + ' min';
+  if (d < 86400000) return 'hace ' + Math.round(d / 3600000) + ' h';
+  if (d < 172800000) return 'ayer';
+  try { return new Date(ms).toLocaleDateString('es-CR', { day: 'numeric', month: 'short' }); } catch (e) { return ''; }
+}
+function toast(msg, ms = 2800) {
+  $$('.toast').forEach((t) => t.remove());
+  const t = el('div', 'toast', msg); t.setAttribute('role', 'status'); $('#layer').appendChild(t); setTimeout(() => t.remove(), ms);
+}
+const ICONS = {
+  back: 'M15 5l-7 7 7 7', camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 11.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z',
+  image: 'M4 5h16v14H4zM9 10a1.6 1.6 0 100-3.2A1.6 1.6 0 009 10zM4 17l5-5 4 4 3-3 4 4',
+  trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13', share: 'M12 15V3M7 8l5-5 5 5M5 13v8h14v-8',
+  download: 'M12 4v11M7 11l5 5 5-5M5 20h14', file: 'M7 3h7l5 5v13H7zM14 3v5h5', plus: 'M12 5v14M5 12h14',
+  left: 'M15 5l-7 7 7 7', right: 'M9 5l7 7-7 7', copy: 'M9 9h11v11H9zM5 15V5h10', pen: 'M4 20l4-1L19 8l-3-3L5 16zM14 7l3 3',
+  dots: 'M12 5h.01M12 12h.01M12 19h.01', check: 'M5 12l5 5 9-10', search: 'M11 4a7 7 0 100 14 7 7 0 000-14zM20 20l-4-4', star: 'M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 17l-5.4 2.8 1.1-6.1L3.2 9.4l6.1-.8z', speaker: 'M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11', clock: 'M12 4a8 8 0 100 16 8 8 0 000-16zM12 8v4l3 2', shuffle: 'M4 7h4l8 10h4M4 17h4l2-2.5M14 9.5L16 7h4M18 5l2 2-2 2M18 15l2 2-2 2', timer: 'M12 5a8 8 0 100 16 8 8 0 000-16zM12 9v4l2.5 2M9 2h6', calc: 'M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01', cal: 'M4 5h16v15H4zM4 10h16M8 3v4M16 3v4', money: 'M12 3a9 9 0 100 18 9 9 0 000-18zM14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2c-1 0-2-.5-2.5-1.5M12 6.5V8M12 16v1.5', ruler: 'M3 16L16 3l5 5L8 21zM7 12l2 2M10 9l2 2M13 6l2 2', mic: 'M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3zM6 11a6 6 0 0012 0M12 17v4', compass: 'M12 3a9 9 0 100 18 9 9 0 000-18zM15.5 8.5L13.5 13.5 8.5 15.5l2-5z', level: 'M3 9h18v6H3zM12 9v6M8 12h.01M16 12h.01', qr: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v6h-4M14 18h2v2', tap: 'M12 3v18M3 12h18', loan: 'M4 19h16M6 19V9l6-5 6 5v10M10 19v-5h4v5', pct: 'M6 18L18 6M7.5 9a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM16.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z', receipt: 'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6', dice: 'M5 4h14v16H5zM9 8h.01M15 8h.01M12 12h.01M9 16h.01M15 16h.01', briefcase: 'M4 8h16v12H4zM9 8V5h6v3M4 13h16', lock: 'M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 017 0v3', unlock: 'M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 016.7-1.4', eye: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z', eyeoff: 'M3 3l18 18M10 6.2A9.5 9.5 0 0112 5c6 0 10 7 10 7a17 17 0 01-3 3.7M6.3 7.6A17 17 0 002 12s4 7 10 7a9.6 9.6 0 004-.9', key: 'M14 10a4 4 0 11-1.2-2.8L21 15v3h-3v-2h-2v-2h-2.5zM8 8.5h.01', card: 'M3 6h18v12H3zM3 10h18M6 15h4', wifi: 'M2 9a15 15 0 0120 0M5 12.5a10 10 0 0114 0M8.5 16a5 5 0 017 0M12 19.5h.01', note: 'M6 3h9l4 4v14H6zM15 3v4h4M9 12h7M9 16h7', barcode: 'M4 5v14M7 5v14M11 5v14M14 5v14M17 5v14M20 5v14', gear: 'M12 9a3 3 0 100 6 3 3 0 000-6zM19 12l2-1.5-2-3.5-2.3.8-2-1.1L14 4h-4l-.7 2.7-2 1.1L5 7 3 10.5 5 12l-.1 1.2L3 14.5 5 18l2.3-.8 2 1.1L10 21h4l.7-2.7 2-1.1 2.3.8 2-3.5-2-1.5z', finger: 'M12 3a7 7 0 00-7 7M12 3a7 7 0 017 7v2M8 21c-1-2-1-4-1-6a5 5 0 0110 0c0 2 0 4 1 6M12 12v4c0 2 .5 3.5 1 5M9.5 17c.2 1.5.5 2.5 1 4', dice: 'M5 4h14v16H5zM9 8h.01M15 8h.01M12 12h.01M9 16h.01M15 16h.01', play: 'M7 4l13 8-13 8z', pause: 'M7 4h4v16H7zM13 4h4v16h-4z', next: 'M6 5l10 7-10 7zM18 5v14', prev: 'M18 5L8 12l10 7zM6 5v14', repeat: 'M4 11V9a3 3 0 013-3h12l-3-3M20 13v2a3 3 0 01-3 3H5l3 3', music: 'M9 18V5l11-2v13M9 18a3 3 0 11-6 0 3 3 0 016 0zM20 16a3 3 0 11-6 0 3 3 0 016 0z', radio: 'M4 9h16v11H4zM8 9l9-5M8 14.5a2 2 0 100 .01M13 13h5M13 16h5', globe: 'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18', moon: 'M20 14A8 8 0 019.5 4 8 8 0 1020 14z', list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01', down: 'M6 9l6 6 6-6', sun: 'M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M2 12h2M20 12h2'
+};
+function icon(n, s = 24) { return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" aria-hidden="true"><path d="' + (ICONS[n] || '') + '"/></svg>'; }
+function paintIcons(r = document) { $$('[data-i]', r).forEach((e) => { if (!e.firstChild) e.innerHTML = icon(e.dataset.i); }); }
+
+/* hojas desde abajo */
+let sheetClose = null;
+function openSheet(title, build) {
+  if (sheetClose) sheetClose();
+  const bd = el('div', 'backdrop'), sh = el('div', 'sheet');
+  sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', title);
+  sh.appendChild(el('div', 'grab')); sh.appendChild(el('h2', '', title));
+  const close = () => { bd.remove(); sh.remove(); if (sheetClose === close) sheetClose = null; if (sh._onClose) sh._onClose(); };
+  sheetClose = close; bd.addEventListener('click', close);
+  build(sh, close); $('#layer').append(bd, sh);
+  return close;
+}
+function optBtn(ic, label, fn, o) {
+  o = o || {};
+  const b = el('button', 'opt' + (o.danger ? ' danger' : '')); b.type = 'button';
+  b.innerHTML = icon(ic, 22) + '<span>' + esc(label) + '</span>';
+  if (o.pressed != null) b.setAttribute('aria-pressed', o.pressed ? 'true' : 'false');
+  b.addEventListener('click', fn); return b;
+}
+const grid = (sh) => { const g = el('div', 'grid'); sh.appendChild(g); return g; };
+const note = (sh, t) => { const p = el('p', '', t); p.style.color = 'var(--muted)'; p.style.margin = '0 0 10px'; sh.appendChild(p); return p; };
+
+/* Guardar / compartir archivos */
+async function saveFile(name, blob) {
+  const claude = window.claude;
+  if (claude && claude.use) {
+    let dl = null; try { dl = await claude.use('downloads'); } catch (e) { dl = null; }
+    if (dl) { try { await dl.save({ filename: name, data: blob }); return 'saved'; } catch (e) { if (e && e.code === 'declined') return 'declined'; } }
+  }
+  const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); return 'saved';
+}
+async function shareFiles(files) {
+  try {
+    if (navigator.canShare && navigator.canShare({ files })) { await navigator.share({ files }); return 'shared'; }
+  } catch (e) { if (e && e.name === 'AbortError') return 'declined'; }
+  return 'unsupported';
+}
+const canShareFiles = (files) => { try { return !!(navigator.canShare && navigator.canShare({ files })); } catch (e) { return false; } };
+
+/* ===== Mthi Social: base ===== */
+const jget = (k, d) => { try { const v = JSON.parse(lsGet(k)); return v == null ? d : v; } catch (e) { return d; } };
+const jset = (k, v) => lsSet(k, JSON.stringify(v));
+const $c = () => $('#content');
+function seg(opts, cur, on) { const w = el('div', 'seg'); const bs = opts.map(([k, t]) => { const b = el('button', '', t); b.type = 'button'; b.setAttribute('aria-pressed', k === cur ? 'true' : 'false'); b.addEventListener('click', () => { bs.forEach((x) => x.setAttribute('aria-pressed', 'false')); b.setAttribute('aria-pressed', 'true'); on(k); }); w.appendChild(b); return b; }); return w; }
+function field(label, o) { o = o || {}; const l = el('label', 'lb'); l.appendChild(document.createTextNode(label)); const i = el(o.area ? 'textarea' : 'input', 'in'); if (o.area) { i.rows = o.rows || 3; i.style.cssText = 'padding:10px 14px;min-height:80px;font-size:16px;resize:vertical'; } else i.type = o.type || 'text'; if (o.ph) i.placeholder = o.ph; if (o.mode) i.inputMode = o.mode; if (o.val != null) i.value = o.val; i.autocomplete = 'off'; l.appendChild(i); return { l, i }; }
+function btn(txt, cls, fn) { const b = el('button', cls || 'pill', txt); b.type = 'button'; if (fn) b.addEventListener('click', fn); return b; }
+async function copyText(t) { try { await navigator.clipboard.writeText(t); toast('Copiado ✓', 1400); return true; } catch (e) { const a = el('textarea'); a.value = t; a.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(a); a.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (x) { /* nada */ } a.remove(); toast(ok ? 'Copiado ✓' : 'No se pudo copiar', 1400); return ok; } }
+function openUrl(u) { const a = el('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove(); }
+function pickImages(multi) { return new Promise((res) => { const i = el('input'); i.type = 'file'; i.accept = 'image/*'; if (multi) i.multiple = true; i.style.display = 'none'; document.body.appendChild(i); i.addEventListener('change', () => { const f = Array.from(i.files || []); i.remove(); res(f); }); i.addEventListener('cancel', () => { i.remove(); res([]); }); i.click(); }); }
+async function loadImage(file, max) { max = max || 1600; let bm; try { bm = await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (e) { bm = await new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('No se pudo abrir la imagen')); im.src = URL.createObjectURL(file); }); } const w = bm.width || bm.naturalWidth, h = bm.height || bm.naturalHeight, k = Math.min(1, max / Math.max(w, h)); const c = mkCanvas(w * k, h * k); c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height); if (bm.close) bm.close(); return c; }
+async function sendBlob(blob, name, type) { const f = new File([blob], name, { type: type || blob.type }); if (canShareFiles([f])) { const r = await shareFiles([f]); if (r !== 'unsupported') return; } await saveFile(name, blob); toast('Guardado en descargas ✓', 2000); }
+function ptr(cv, e) { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; }
+function chipRow(items, cur, on) { return seg(items, cur, on); }
+function colorRow(cols, cur, on) { const w = el('div', 'row2'); const bs = cols.map((c) => { const b = el('button', 'sw'); b.type = 'button'; b.style.background = c; b.setAttribute('aria-label', 'Color ' + c); b.setAttribute('aria-pressed', c === cur ? 'true' : 'false'); b.addEventListener('click', () => { bs.forEach((x) => x.setAttribute('aria-pressed', 'false')); b.setAttribute('aria-pressed', 'true'); on(c); }); w.appendChild(b); return b; }); return w; }
+
+/* ===== Llamada: WebRTC sin servidor (códigos a mano) ===== */
+const b64u = (u8) => { let s = ''; u8.forEach((b) => { s += String.fromCharCode(b); }); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64u = (t) => { t = t.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; const s = atob(t); return Uint8Array.from(s, (c) => c.charCodeAt(0)); };
+async function pack(o) { const st = new Blob([JSON.stringify(o)]).stream().pipeThrough(new CompressionStream('deflate-raw')); return 'MTHI1.' + b64u(new Uint8Array(await new Response(st).arrayBuffer())); }
+async function unpack(t) { const m = String(t).match(/MTHI1\.([A-Za-z0-9_-]+)/); if (!m) throw new Error('Ese código no es de Mthi Llamada'); const st = new Blob([unb64u(m[1])]).stream().pipeThrough(new DecompressionStream('deflate-raw')); return JSON.parse(await new Response(st).text()); }
+function tuneSdp(sdp, kbps) { const m = sdp.match(/a=rtpmap:(\d+) opus\/48000\/2/); if (!m) return sdp; const pt = m[1], extra = 'minptime=20;useinbandfec=1;usedtx=1;stereo=0;sprop-stereo=0;maxaveragebitrate=' + kbps * 1000 + ';maxplaybackrate=24000'; const re = new RegExp('a=fmtp:' + pt + ' (.*)\\r?\\n'); if (re.test(sdp)) return sdp.replace(re, (x, p) => 'a=fmtp:' + pt + ' ' + p.replace(/(minptime|useinbandfec|usedtx|stereo|sprop-stereo|maxaveragebitrate|maxplaybackrate)=[^;]*;?/g, '').replace(/;$/, '') + ';' + extra + '\r\n'); return sdp.replace(new RegExp('(a=rtpmap:' + pt + ' opus/48000/2\\r?\\n)'), '$1a=fmtp:' + pt + ' ' + extra + '\r\n'); }
+const ICE = (local) => ({ iceServers: local ? [] : [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun.cloudflare.com:3478' }] });
+function gather(pc) { return new Promise((res) => { if (pc.iceGatheringState === 'complete') return res(); const t = setTimeout(res, 7000); pc.addEventListener('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') { clearTimeout(t); res(); } }); }); }
+async function getMic() { if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Este navegador no permite usar el micrófono.'); try { return await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }, video: false }); } catch (e) { throw new Error(e && e.name === 'NotAllowedError' ? 'Necesito permiso para usar el micrófono.' : 'No pude abrir el micrófono.'); } }
+
+class Call {
+  constructor(local, on) { this.local = local; this.on = on; this.pc = null; this.dc = null; this.mic = null; this.audio = null; this.t0 = 0; this.bytes = 0; this.eco = false; this.rtt = null; this.timer = null; this.ended = false; }
+  setup() {
+    const pc = this.pc = new RTCPeerConnection(ICE(this.local)); this.mic.getTracks().forEach((t) => pc.addTrack(t, this.mic));
+    pc.ontrack = (e) => { if (!this.audio) { this.audio = new Audio(); this.audio.autoplay = true; this.audio.setAttribute('playsinline', ''); } this.audio.srcObject = e.streams[0] || new MediaStream([e.track]); this.audio.play().catch(() => this.on('needplay')); };
+    pc.onconnectionstatechange = () => { const s = pc.connectionState; if (s === 'connected') { if (!this.t0) this.t0 = Date.now(); this.startStats(); } if (!this.ended) this.on('state', s); };
+    pc.ondatachannel = (e) => this.hook(e.channel);
+  }
+  hook(dc) { this.dc = dc; dc.onopen = () => this.on('chatopen'); dc.onclose = () => this.on('chatclose'); dc.onmessage = (e) => this.on('msg', e.data); }
+  async create(eco) { this.mic = await getMic(); this.setup(); this.hook(this.pc.createDataChannel('chat')); const o = await this.pc.createOffer(); await this.pc.setLocalDescription({ type: 'offer', sdp: tuneSdp(o.sdp, eco ? 12 : 32) }); await gather(this.pc); return pack({ t: 'o', s: this.pc.localDescription.sdp, l: this.local ? 1 : 0 }); }
+  async accept(code, eco) { const o = await unpack(code); if (o.t !== 'o') throw new Error('Ese es un código de respuesta. Aquí va el código que te dio tu amigo al crear la llamada.'); this.mic = await getMic(); this.setup(); await this.pc.setRemoteDescription({ type: 'offer', sdp: o.s }); const a = await this.pc.createAnswer(); await this.pc.setLocalDescription({ type: 'answer', sdp: tuneSdp(a.sdp, eco ? 12 : 32) }); await gather(this.pc); return pack({ t: 'a', s: this.pc.localDescription.sdp }); }
+  async finish(code) { const o = await unpack(code); if (o.t !== 'a') throw new Error('Ese es un código de invitación. Aquí va la respuesta de tu amigo.'); await this.pc.setRemoteDescription({ type: 'answer', sdp: o.s }); }
+  send(s) { if (this.dc && this.dc.readyState === 'open') { try { this.dc.send(s); return true; } catch (e) { return false; } } return false; }
+  setMute(m) { if (this.mic) this.mic.getAudioTracks().forEach((t) => { t.enabled = !m; }); }
+  async setEco(e) { this.eco = e; try { const s = this.pc.getSenders().find((x) => x.track && x.track.kind === 'audio'); const p = s.getParameters(); if (!p.encodings || !p.encodings.length) p.encodings = [{}]; p.encodings[0].maxBitrate = e ? 10000 : 32000; await s.setParameters(p); } catch (x) { /* no soportado */ } }
+  startStats() { if (this.timer) return; const tick = async () => { try { const st = await this.pc.getStats(); let b = 0; st.forEach((r) => { if (r.type === 'candidate-pair' && r.state === 'succeeded' && r.nominated) { if (r.currentRoundTripTime != null) this.rtt = Math.round(r.currentRoundTripTime * 1000); b = (r.bytesSent || 0) + (r.bytesReceived || 0); } }); if (b) this.bytes = b; this.on('stats'); } catch (e) { /* nada */ } }; this.timer = setInterval(tick, 4000); tick(); }
+  end() { this.ended = true; clearInterval(this.timer); try { this.dc && this.dc.close(); } catch (e) { /* ok */ } try { this.pc && this.pc.close(); } catch (e) { /* ok */ } if (this.mic) this.mic.getTracks().forEach((t) => t.stop()); if (this.audio) { this.audio.srcObject = null; } }
+}
+
+/* ===== Mthi Llamada: pantallas ===== */
+let call = null, view = 'home', local = jget('lla-local', false), eco = jget('lla-eco', false), wake = null, wantWake = false, chatBox = null, unread = 0, tickT = null, pending = null;
+const LOG = jget('lla-log', []), SEEN = new Set(LOG.filter((m) => !m.me).map((m) => m.id));
+const saveLog = () => jset('lla-log', LOG.slice(-300));
+const fmtT = (ms) => { let s = Math.max(0, Math.floor(ms / 1000)); const d = Math.floor(s / 86400); s %= 86400; const h = Math.floor(s / 3600); s %= 3600; const m = Math.floor(s / 60); s %= 60; const p = (n) => String(n).padStart(2, '0'); return (d ? d + 'd ' : '') + p(h) + ':' + p(m) + ':' + p(s); };
+const fmtMB = (b) => (b < 1048576 ? Math.round(b / 1024) + ' KB' : b < 1073741824 ? (b / 1048576).toFixed(1) + ' MB' : (b / 1073741824).toFixed(2) + ' GB');
+function sendMsg(x) { const m = { id: newId(), me: true, x, t: Date.now(), ok: false }; LOG.push(m); saveLog(); flush(); drawChat(); }
+function flush() { if (!call) return; LOG.forEach((m) => { if (m.me && !m.ok) call.send(JSON.stringify({ k: 'm', id: m.id, x: m.x, t: m.t })); }); }
+function onMsg(raw) { let o; try { o = JSON.parse(raw); } catch (e) { return; } if (o.k === 'bye') { if (call) { toast('Tu amigo colgó', 3000); endCall(); } } else if (o.k === 'a') { const m = LOG.find((x) => x.id === o.id); if (m) { m.ok = true; saveLog(); drawChat(); } } else if (o.k === 'm' && typeof o.x === 'string') { call && call.send(JSON.stringify({ k: 'a', id: o.id })); if (SEEN.has(o.id)) return; SEEN.add(o.id); LOG.push({ id: o.id, me: false, x: o.x.slice(0, 2000), t: o.t || Date.now(), ok: true }); saveLog(); if (view !== 'chat' && !(chatBox && chatBox.offsetParent)) unread++; drawChat(); if (document.hidden) { try { navigator.vibrate && navigator.vibrate(60); } catch (e) { /* ok */ } } } }
+function drawChat() { const b = chatBox; if (b && b.isConnected) { const stick = b.scrollTop + b.clientHeight >= b.scrollHeight - 40; b.textContent = ''; LOG.slice(-80).forEach((m) => { const d = el('div', 'msg ' + (m.me ? 'me' : 'you')); d.textContent = m.x; if (m.me) { const s = el('small', '', m.ok ? ' ✓' : ' ⏳'); d.appendChild(s); } b.appendChild(d); }); if (stick) b.scrollTop = b.scrollHeight; } const bd = $('#unread'); if (bd) { bd.hidden = !unread; bd.textContent = unread; } }
+function chatBlock(h) { const w = el('div', 'chatw'); const box = el('div', 'chatbox'); box.style.height = h || '220px'; chatBox = box; const f = el('form', 'chatf'); const i = el('input', 'in'); i.placeholder = 'Escribe un mensaje…'; i.autocomplete = 'off'; const s = btn('Enviar', 'pill pr'); s.type = 'submit'; f.append(i, s); f.addEventListener('submit', (e) => { e.preventDefault(); const t = i.value.trim(); if (t) { sendMsg(t.slice(0, 2000)); i.value = ''; } }); w.append(box, f); setTimeout(() => { drawChat(); box.scrollTop = box.scrollHeight; }, 0); unread = 0; return w; }
+async function wakeOn(on) { wantWake = on; try { if (on) { if (navigator.wakeLock && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } else if (wake) { await wake.release(); wake = null; } } catch (e) { /* ok */ } }
+document.addEventListener('visibilitychange', () => { if (!document.hidden && wantWake && !wake && call) wakeOn(true); });
+function setTitle(t, back) { $('#ttl').innerHTML = t; $('#backBtn').hidden = !back; }
+function endCall(go) { if (call) { const c0 = call; call = null; c0.send(JSON.stringify({ k: 'bye' })); setTimeout(() => c0.end(), 300); } wakeOn(false); clearInterval(tickT); try { navigator.mediaSession.metadata = null; navigator.mediaSession.playbackState = 'none'; } catch (e) { /* ok */ } if (go !== false) show('home'); }
+function show(v, arg) { view = v; const c = $c(); c.textContent = ''; c.scrollTop = 0; chatBox = null; ({ home, create: viewCreate, join: viewJoin, call: viewCall, chat: viewChat })[v](c, arg); }
+function codeBox(code, label) { const w = el('div'); w.appendChild(el('h3', 'h3', label)); const t = el('textarea', 'in code'); t.readOnly = true; t.value = code; t.rows = 4; t.addEventListener('focus', () => t.select()); const r = el('div', 'row2'); r.append(btn('Copiar código', 'pill', () => copyText(code)), btn('Compartir', 'pill pr', async () => { try { if (navigator.share) await navigator.share({ text: code }); else copyText(code); } catch (e) { /* cancelado */ } })); w.append(t, r); return w; }
+function modeSeg(c) { c.append(seg([[0, '🌐 Con internet'], [1, '📶 Sin internet (mismo Wi-Fi)']], local ? 1 : 0, (k) => { local = +k === 1; jset('lla-local', local); help.textContent = helpTxt(); })); const help = el('p', 'note', helpTxt()); c.appendChild(help); }
+const helpTxt = () => (local ? 'Los dos teléfonos deben estar en la misma red Wi-Fi (aunque no tenga internet) o uno conectado a la zona Wi-Fi del otro.' : 'Funciona con Wi-Fi o datos, en cualquier lugar. Si una red móvil bloquea la conexión directa, prueba con Wi-Fi.');
+function home(c) { setTitle('Mthi <span>Llamada</span>', false); modeSeg(c); const a = btn('📞 Crear llamada', 'big pr', () => show('create')), b = btn('🔗 Unirme con un código', 'big', () => show('join')), m = btn('💬 Chat' + (LOG.length ? ' (' + LOG.length + ')' : ''), 'big', () => show('chat')); c.append(a, b, m, el('p', 'note', 'Sin cuentas, sin anuncios y sin límite de tiempo. La voz va directo entre los dos teléfonos.')); const eb = el('label', 'tgl'); const cb = el('input'); cb.type = 'checkbox'; cb.checked = eco; cb.addEventListener('change', () => { eco = cb.checked; jset('lla-eco', eco); }); eb.append(cb, document.createTextNode(' Modo ahorro (menos datos y batería)')); c.appendChild(eb); const how = el('div', 'card'); how.innerHTML = '<b>Cómo se conecta</b><ol><li>Uno toca <i>Crear llamada</i> y le manda el código a su amigo por WhatsApp, SMS…</li><li>El amigo toca <i>Unirme</i>, pega el código y te devuelve su respuesta.</li><li>Pegas la respuesta… ¡y a hablar! Solo se hace una vez por llamada.</li></ol>'; c.appendChild(how); if (location.hash.indexOf('MTHI1.') >= 0 || /[#&]c=/.test(location.hash)) show('join'); }
+async function viewCreate(c) { setTitle('Crear llamada', true); const st = el('p', 'note', 'Preparando… (puede tardar unos segundos)'); c.appendChild(st); endCall(false); call = new Call(local, handler); try { const code = await call.create(eco); if (view !== 'create') return; st.remove(); c.append(el('p', '', '1. Mándale este código a tu amigo:'), codeBox(code, 'Tu código'), el('h3', 'h3', '2. Pega aquí lo que él te responda')); const t = el('textarea', 'in'); t.rows = 4; t.placeholder = 'MTHI1.…'; const msg = el('p', 'err'); const go = btn('Conectar', 'pill pr', async () => { msg.textContent = ''; try { go.disabled = true; await call.finish(t.value); msg.textContent = 'Conectando…'; msg.style.color = 'var(--muted)'; } catch (e) { msg.style.color = '#d33'; msg.textContent = e.message || 'Código inválido'; go.disabled = false; } }); go.style.width = '100%'; c.append(t, go, msg); } catch (e) { st.textContent = e.message || 'No se pudo preparar la llamada'; st.style.color = '#d33'; endCall(false); } }
+function viewJoin(c) { setTitle('Unirme a una llamada', true); c.appendChild(el('p', '', '1. Pega el código que te mandó tu amigo:')); const t = el('textarea', 'in'); t.rows = 4; t.placeholder = 'MTHI1.…'; const h = location.hash.match(/MTHI1\.[A-Za-z0-9_-]+/); if (h) t.value = h[0]; const msg = el('p', 'err'), out = el('div'); const go = btn('Generar mi respuesta', 'pill pr', async () => { msg.textContent = ''; out.textContent = ''; go.disabled = true; try { endCall(false); call = new Call(local, handler); const o = await unpack(t.value); const code = await call.accept(t.value, eco); out.append(el('p', '', '2. Devuélvele esta respuesta a tu amigo:'), codeBox(code, 'Tu respuesta'), el('p', 'note', 'Cuando él la pegue, la llamada empieza sola. No cierres esta pantalla.')); void o; } catch (e) { msg.style.color = '#d33'; msg.textContent = e.message || 'Código inválido'; endCall(false); go.disabled = false; } }); go.style.width = '100%'; c.append(t, go, msg, out); }
+function handler(ev, a) { if (ev === 'state') { if (a === 'connected') { if (view !== 'call') show('call'); else upd(); } else if (view === 'call') upd(); else if (a === 'failed' && view !== 'home') { toast('No se pudo conectar. Revisa que los dos estén en la misma red o prueba otra vez.', 4200); } } else if (ev === 'chatopen') flush(); else if (ev === 'msg') onMsg(a); else if (ev === 'stats') upd(); else if (ev === 'needplay') { toast('Toca la pantalla para oír', 3000); const f = () => { call && call.audio && call.audio.play(); document.removeEventListener('pointerdown', f); }; document.addEventListener('pointerdown', f); } }
+let upd = () => {};
+function viewCall(c) {
+  setTitle('En llamada', true); const big = el('div', 'timer', '00:00:00'), st = el('p', 'note', 'Conectado'), info = el('p', 'note'); const row = el('div', 'row2'); let muted = false;
+  const mb = btn('🎙️ Silenciar', 'chipb', () => { muted = !muted; call.setMute(muted); mb.textContent = muted ? '🔇 Silenciado' : '🎙️ Silenciar'; mb.setAttribute('aria-pressed', muted); }); const eb = btn('🔋 Ahorro', 'chipb', () => { eco = !eco; jset('lla-eco', eco); call.setEco(eco); eb.setAttribute('aria-pressed', eco); }); eb.setAttribute('aria-pressed', eco); const wb = btn('☀️ Pantalla encendida', 'chipb', () => { wakeOn(!wantWake).then(() => wb.setAttribute('aria-pressed', wantWake)); wb.setAttribute('aria-pressed', !wantWake); }); row.append(mb, eb, wb); if (eco) call.setEco(true);
+  const hang = btn('Colgar', 'pill hang', () => { endCall(); }); hang.style.cssText = 'width:100%;margin:12px 0'; const tip = el('p', 'note', 'Puedes salir de la app o apagar la pantalla: la llamada sigue. Si la deslizas para cerrarla, se corta. Para que Android no la duerma, en Ajustes → Batería deja a Chrome sin restricciones.'); c.append(big, st, info, row, hang, chatBlock('200px'), tip);
+  upd = () => { if (!call) return; big.textContent = call.t0 ? fmtT(Date.now() - call.t0) : '00:00:00'; const s = call.pc && call.pc.connectionState; st.textContent = s === 'connected' ? 'Conectado' + (call.rtt != null ? ' · ' + (call.rtt < 150 ? 'conexión buena' : call.rtt < 400 ? 'conexión regular' : 'conexión mala') + ' (' + call.rtt + ' ms)' : '') : s === 'disconnected' ? 'Reconectando…' : s === 'failed' || s === 'closed' ? 'Se cortó la conexión' : s; info.textContent = call.bytes ? 'Datos usados: ' + fmtMB(call.bytes) : ''; if (s === 'failed' && !call._rec) { call._rec = 1; toast('Se cortó la llamada. Puedes volver a conectar con un código nuevo.', 4500); } };
+  clearInterval(tickT); tickT = setInterval(upd, 1000); upd(); try { navigator.mediaSession.metadata = new MediaMetadata({ title: 'Llamada de Mthi', artist: 'En curso', artwork: [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }] }); navigator.mediaSession.playbackState = 'playing'; navigator.mediaSession.setActionHandler('hangup', () => endCall()); } catch (e) { /* ok */ }
+}
+function viewChat(c) { setTitle('Chat', true); c.append(chatBlock('55vh'), el('p', 'note', 'Los mensajes con ⏳ se mandan solos cuando vuelvas a conectar con tu amigo. Se guardan solo en tu teléfono.'), btn('Borrar el chat', 'chipb', () => { if (confirm('¿Borrar todo el chat de este teléfono?')) { LOG.length = 0; SEEN.clear(); saveLog(); drawChat(); } })); }
+paintIcons(); $('#backBtn').addEventListener('click', () => { if (view === 'call' && call && call.pc && call.pc.connectionState === 'connected') { if (confirm('¿Colgar la llamada?')) endCall(); } else { endCall(false); show('home'); } });
+window.addEventListener('beforeunload', (e) => { if (call && call.pc && call.pc.connectionState === 'connected') { e.preventDefault(); e.returnValue = ''; } });
+show('home');
+
+</script>
+
+<script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
+</body></html>
